@@ -2,6 +2,9 @@ package ourbusinessproject;
 
 import javax.validation.constraints.NotEmpty;
 
+/**
+ * Class representing a project
+ */
 public class Project {
 
     @NotEmpty
