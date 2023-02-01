@@ -1,8 +1,8 @@
 
 # Our Business Project - A spring boot / JPA project
 
-### NOM : DOE
-### Prénom : John
+### NOM : Silvestre
+### Prénom : Franck
 ### Groupe de TP : 
 - [ ] 1
 - [x] 2
