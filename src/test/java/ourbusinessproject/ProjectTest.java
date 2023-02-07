@@ -2,6 +2,9 @@ package ourbusinessproject;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.validation.Validation;
 import javax.validation.ValidatorFactory;
@@ -9,10 +12,14 @@ import javax.validation.Validator;
 
 import static org.junit.Assert.*;
 
+@RunWith(SpringRunner.class)
 public class ProjectTest {
 
     private Validator validator;
     private Project project;
+
+    @MockBean
+    private Enterprise enterprise;
 
 
     @Before
@@ -23,6 +30,7 @@ public class ProjectTest {
         project = new Project();
         project.setTitle("A project");
         project.setDescription("Project description");
+        project.setEnterprise(enterprise);
 
     }
 
@@ -49,7 +57,7 @@ public class ProjectTest {
     }
 
     @Test
-    public void testProjectInvalidation() {
+    public void testProjectWithNoTitleInvalidation() {
 
         // given : a project with a non empty title and a non empty description
 
@@ -61,6 +69,19 @@ public class ProjectTest {
 
         // when: the project has no title
         project.setTitle(null);
+
+        // then: the project is no more valid
+        assertFalse("expected one constraint violation", validator.validate(project).isEmpty());
+
+    }
+
+    @Test
+    public void testProjectWithNoEnterpriseInvalidation() {
+
+        // given : a project with a non empty title and a non empty description
+
+        // when: the project has no enterprise
+        project.setEnterprise(null);
 
         // then: the project is no more valid
         assertFalse("expected one constraint violation", validator.validate(project).isEmpty());

@@ -4,6 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 /**
  * Class representing a project
@@ -17,6 +18,9 @@ public class Project {
     @Id
     @GeneratedValue
     private Long id;
+
+    @NotNull
+    private Enterprise enterprise;
 
     public void setTitle(String title) {
         this.title = title;
@@ -36,5 +40,13 @@ public class Project {
 
     public Long getId() {
         return id;
+    }
+
+    public void setEnterprise(Enterprise enterprise) {
+        this.enterprise = enterprise;
+    }
+
+    public Enterprise getEnterprise() {
+        return enterprise;
     }
 }
