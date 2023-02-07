@@ -28,11 +28,6 @@ public class EnterpriseProjectServiceIntegrationTest {
     @Before
     public void setUp() {
 
-        // given a a valid project
-        project = new Project();
-        project.setTitle("A project");
-        project.setDescription("Project description");
-
         // given a a valid Enterprise
         enterprise = new Enterprise();
         enterprise.setName("MyComp");
@@ -40,10 +35,16 @@ public class EnterpriseProjectServiceIntegrationTest {
         enterprise.setContactEmail("comp@com.com");
         enterprise.setContactName("comp contact name");
 
+        // given a a valid project
+        project = new Project();
+        project.setTitle("A project");
+        project.setDescription("Project description");
+        project.setEnterprise(enterprise);
+
     }
 
     @Test
-    public void testSaveValidProject() {
+    public void testSaveValidProjectWithNewEnterprise() {
 
         // given a a valid project
 
@@ -52,6 +53,30 @@ public class EnterpriseProjectServiceIntegrationTest {
 
         // expect the project is saved with a generated id
         assertThat(project.getId(), is(notNullValue()));
+
+        // expect its enterprise is saved too
+        assertThat(project.getEnterprise().getId(), is(notNullValue()));
+
+        // expect the enterprise has the project referenced in its collection of projects
+        assertThat(enterprise.getProjects(), hasItem(project));
+
+    }
+
+    @Test
+    public void testSaveValidProjectWithAlreadySavedEnterprise() {
+
+        // given a a valid project and an already saved enterprise
+        enterpriseProjectService.save(enterprise);
+
+        // when saving the project
+        enterpriseProjectService.save(project);
+
+        // expect the project is saved with a generated id
+        assertThat(project.getId(), is(notNullValue()));
+
+        // expect the enterprise has the project referenced in its collection of projects
+        assertThat(enterprise.getProjects(), hasItem(project));
+
     }
 
     @Test(expected = ConstraintViolationException.class)
