@@ -21,6 +21,7 @@ public class EnterpriseProjectService {
 
     /**
      * Save a new project
+     *
      * @param project the project to save
      */
     public void save(Project project) {
@@ -35,6 +36,7 @@ public class EnterpriseProjectService {
 
     /**
      * Save a new enterprise
+     *
      * @param enterprise the enterprise to save
      */
     public void save(Enterprise enterprise) {
@@ -44,6 +46,7 @@ public class EnterpriseProjectService {
 
     /**
      * Find a project by id
+     *
      * @param anId the id of the targeted project
      * @return the found project
      */
@@ -53,6 +56,7 @@ public class EnterpriseProjectService {
 
     /**
      * Find an enterprise by id
+     *
      * @param anId the id of the targeted enterprise
      * @return the found enterprise
      */
