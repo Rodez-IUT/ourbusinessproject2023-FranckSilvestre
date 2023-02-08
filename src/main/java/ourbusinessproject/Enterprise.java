@@ -8,6 +8,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.util.Collection;
+import java.util.HashSet;
 
 @Entity
 public class Enterprise {
@@ -66,7 +67,14 @@ public class Enterprise {
         return projects;
     }
 
-    public void setProjects(Collection<Project> projects) {
-        this.projects = projects;
+    /**
+     * Add a project to the enterprise
+     * @param project the project to add
+     */
+    public void addProject(Project project) {
+        if (projects == null) {
+            projects = new HashSet<>();
+        }
+        projects.add(project);
     }
 }

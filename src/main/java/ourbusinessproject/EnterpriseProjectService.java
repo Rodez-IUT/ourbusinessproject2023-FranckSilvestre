@@ -24,7 +24,11 @@ public class EnterpriseProjectService {
      * @param project the project to save
      */
     public void save(Project project) {
-        save(project.getEnterprise());
+        Enterprise enterprise = project.getEnterprise();
+        if (enterprise != null) {
+            enterprise.addProject(project);
+            save(enterprise);
+        }
         entityManager.persist(project);
         entityManager.flush();
     }
