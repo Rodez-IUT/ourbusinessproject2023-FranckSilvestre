@@ -23,6 +23,23 @@ public class Project {
     @NotNull @ManyToOne
     private Enterprise enterprise;
 
+    /**
+     * Create a new project initialized with title, description et enterprise
+     * @param title the title of the project
+     * @param description the description of the project
+     * @param enterprise the enterprise of the project
+     */
+    public Project(String title, String description, Enterprise enterprise) {
+        this.title = title;
+        this.description = description;
+        this.enterprise = enterprise;
+    }
+
+    /**
+     * JPA  required no argument constructor
+     */
+    public Project() {}
+
     public void setTitle(String title) {
         this.title = title;
     }

@@ -11,6 +11,8 @@ import javax.transaction.Transactional;
 import javax.validation.ConstraintViolationException;
 
 
+import java.util.List;
+
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 
@@ -170,6 +172,29 @@ public class EnterpriseProjectServiceIntegrationTest {
 
         // then the fetched project is null
         assertThat(fetchedEnterprise, is(nullValue()));
+
+    }
+
+    @Test
+    public void testFindAllProjects() {
+        // given an enterprise
+
+        // and three persisted projects
+        enterpriseProjectService.save(new Project("p3", "p3 description", enterprise));
+        enterpriseProjectService.save(new Project("p2", "p2 description", enterprise));
+        enterpriseProjectService.save(project);
+
+
+        // when searching for all projects
+        List<Project> projects = enterpriseProjectService.findAllProjects();
+
+        // then the three projects are fetched
+        assertThat(projects.size(), is(3));
+
+        // and projects are sorted by title
+        assertThat(projects.get(0), is(project));
+        assertThat(projects.get(1).getTitle(), is("p2"));
+        assertThat(projects.get(2).getTitle(), is("p3"));
 
     }
 
