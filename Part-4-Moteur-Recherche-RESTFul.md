@@ -67,9 +67,9 @@ Pourquoi ne pas avoir écrit directement 
 Comment faire pour pouvoir écrire une telle égalité ? 
 	
 La réponse se trouve quelque part par là :
-	https://access.redhat.com/documentation/en-US/JBoss_Enterprise_Application_Platform/4.3/html/Hibernate_Reference_Guide/Persistent_Classes-Implementing_equals_and_hashCode.html 
+	https://docs.jboss.org/hibernate/stable/core.old/reference/en/html/persistent-classes-equalshashcode.html
 
-2. Expliquez en 10 lignes maximum ce que vous avez retenu de votre investigation.
+3. Expliquez en 10 lignes maximum ce que vous avez retenu de votre investigation.
 
 > fix #4.5 arcanes ORM
 
