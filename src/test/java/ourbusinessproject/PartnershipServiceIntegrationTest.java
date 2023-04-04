@@ -21,6 +21,7 @@ public class PartnershipServiceIntegrationTest {
 
     @Autowired private EnterpriseProjectService enterpriseProjectService;
     @Autowired private PartnershipService partnershipService;
+    @Autowired private InitializationService initializationService;
 
     private Enterprise partnerEnterprise;
     private Project project;
@@ -55,9 +56,7 @@ public class PartnershipServiceIntegrationTest {
     @Test
     public void testSavePartnership() {
         // given a partnership
-        Partnership partnership = new Partnership();
-        partnership.setEnterprise(partnerEnterprise);
-        partnership.setProject(project);
+        Partnership partnership = new Partnership(project,partnerEnterprise);
 
         // when saving the partnership
         Partnership resPartnership = partnershipService.save(partnership);
@@ -81,9 +80,7 @@ public class PartnershipServiceIntegrationTest {
     @Test
     public void testRemovePartnership() {
         // given a saved partnership
-        Partnership partnership = new Partnership();
-        partnership.setEnterprise(partnerEnterprise);
-        partnership.setProject(project);
+        Partnership partnership = new Partnership(project,partnerEnterprise);
         partnershipService.save(partnership);
 
         // when removing the partnership
@@ -91,6 +88,34 @@ public class PartnershipServiceIntegrationTest {
 
         // then the partnership is no more in the database
         assertThat(partnershipService.findPartnershipById(partnership.getId()),nullValue());
+
+    }
+
+    @Test
+    public void testPartnershipInitialization() {
+
+        // expect 3 partnerships
+        assertThat(initializationService.getPartnershipP1E1WithE2(), notNullValue());
+        assertThat(initializationService.getPartnershipP1E2WithE1(), notNullValue());
+        assertThat(initializationService.getPartnershipP2E1WithE2(), notNullValue());
+
+        // expect partnership between project1 Enterprise 1 and enterprise 2
+        assertThat(initializationService.getPartnershipP1E1WithE2().getProject().getId(),
+                is(initializationService.getProject1E1().getId()));
+        assertThat(initializationService.getPartnershipP1E1WithE2().getEnterprise().getId(),
+                is(initializationService.getEnterprise2().getId()));
+
+        // expect partnership between project1 Enterprise 2 and enterprise 1
+        assertThat(initializationService.getPartnershipP1E2WithE1().getProject().getId(),
+                is(initializationService.getProject1E2().getId()));
+        assertThat(initializationService.getPartnershipP1E2WithE1().getEnterprise().getId(),
+                is(initializationService.getEnterprise1().getId()));
+
+        // expect partnership between project2 Enterprise 1 and enterprise 2
+        assertThat(initializationService.getPartnershipP2E1WithE2().getProject().getId(),
+                is(initializationService.getProject2E1().getId()));
+        assertThat(initializationService.getPartnershipP2E1WithE2().getEnterprise().getId(),
+                is(initializationService.getEnterprise2().getId()));
 
     }
 

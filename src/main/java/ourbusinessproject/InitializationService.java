@@ -16,11 +16,13 @@ public class InitializationService {
     private Enterprise enterprise1;
     private Enterprise enterprise2;
 
-    private final EnterpriseProjectService enterpriseProjectService;
-
-    public InitializationService(@Autowired EnterpriseProjectService enterpriseProjectService) {
-        this.enterpriseProjectService = enterpriseProjectService;
-    }
+    @Autowired
+    private EnterpriseProjectService enterpriseProjectService;
+    @Autowired
+    private PartnershipService partnershipService;
+    private Partnership partnershipP1E1WithE2;
+    private Partnership partnershipP1E2WithE1;
+    private Partnership partnershipP2E1WithE2;
 
     /**
      * Initialization of the initial list of projects
@@ -33,6 +35,7 @@ public class InitializationService {
         project1E2 = new Project("p1E2","P1E2 desc",enterprise2);
         enterpriseProjectService.save(project1E2);
         project2E1 = new Project("p2E1","P2E1 desc",enterprise1);
+        //project2E1 = new Project("","P2E1 desc",enterprise1);
         enterpriseProjectService.save(project2E1);
     }
 
@@ -49,6 +52,13 @@ public class InitializationService {
         enterprise2.setDescription("My comp2 description");
         enterprise2.setContactEmail("comp2@com.com");
         enterprise2.setContactName("comp2 contact name");
+    }
+
+    @Transactional
+    public void initPartnerships() {
+        partnershipP1E1WithE2 = partnershipService.save(new Partnership(project1E1, enterprise2));
+        partnershipP1E2WithE1 = partnershipService.save(new Partnership(project1E2, enterprise1));
+        partnershipP2E1WithE2 = partnershipService.save(new Partnership(project2E1, enterprise2));
     }
 
     /**
@@ -85,4 +95,18 @@ public class InitializationService {
     public Enterprise getEnterprise2() {
         return enterprise2;
     }
+
+
+    public Partnership getPartnershipP1E1WithE2() {
+        return partnershipP1E1WithE2;
+    }
+
+    public Partnership getPartnershipP1E2WithE1() {
+        return partnershipP1E2WithE1;
+    }
+
+    public Partnership getPartnershipP2E1WithE2() {
+        return partnershipP2E1WithE2;
+    }
+
 }

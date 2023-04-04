@@ -26,7 +26,11 @@ public class Partnership {
     }
 
     public Partnership() {
-        // this.creationDate = new Date();  // bad way
+    }
+
+    public Partnership(Project project, Enterprise partnerEnterprise) {
+        this.project = project;
+        this.enterprise = partnerEnterprise;
     }
 
     public void setCreationDate(Date creationDate) {
@@ -57,7 +61,7 @@ public class Partnership {
         return id;
     }
 
-    @PrePersist // good way
+    @PrePersist
     public void onCreate() {
         this.creationDate = new Date();
     }
