@@ -10,6 +10,7 @@ import javax.transaction.Transactional;
  * Service to manage PartnerShip entities
  */
 @Service
+@Transactional
 public class PartnershipService {
 
     @PersistenceContext
