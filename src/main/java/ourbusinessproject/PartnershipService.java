@@ -1,6 +1,11 @@
 package ourbusinessproject;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import ourbusinessproject.repositories.PartnerRepository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -14,6 +19,9 @@ import java.util.List;
 @Service
 @Transactional
 public class PartnershipService {
+
+    @Autowired
+    private PartnerRepository partnerRepository;
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -52,27 +60,22 @@ public class PartnershipService {
      * @return the list of found partnership
      */
     public List<Partnership> search(String projectTitle,
-                                    String enterpriseName,
-                                    PartnershipKeyOrder keyOrder,
-                                    Order order) {
+                                    String enterpriseName) {
         String jpqlQuery = null;
-        String orderByClause = keyOrder != null ? keyOrder.keyChain : "project.title";
-        String orderDirection = order != null ? order.toString() : "ASC";
-        orderByClause = orderByClause + " " + orderDirection;
         TypedQuery<Partnership> query = null;
         if (projectTitle != null && !projectTitle.isBlank()) {
             if (enterpriseName != null && !enterpriseName.isBlank()) {
-                jpqlQuery = "select part from Partnership part where part.project.title like :projectTitle and part.enterprise.name like :enterpriseName order by part."+orderByClause;
+                jpqlQuery = "select part from Partnership part where part.project.title like :projectTitle and part.enterprise.name like :enterpriseName order by part.project.title";
                 query = entityManager.createQuery(jpqlQuery,Partnership.class);
                 query.setParameter("projectTitle", projectTitle);
                 query.setParameter("enterpriseName", enterpriseName);
             } else {
-                jpqlQuery = "select part from Partnership part where part.project.title like :projectTitle order by part."+orderByClause;
+                jpqlQuery = "select part from Partnership part where part.project.title like :projectTitle order by part.project.title";
                 query = entityManager.createQuery(jpqlQuery,Partnership.class);
                 query.setParameter("projectTitle", projectTitle);
             }
         } else if (enterpriseName != null && !enterpriseName.isBlank()) {
-            jpqlQuery = "select part from Partnership part where part.enterprise.name like :enterpriseName order by part."+orderByClause;
+            jpqlQuery = "select part from Partnership part where part.enterprise.name like :enterpriseName order by part.project.title";
             query = entityManager.createQuery(jpqlQuery, Partnership.class);
             query.setParameter("enterpriseName", enterpriseName);
         } else {
@@ -81,20 +84,16 @@ public class PartnershipService {
         }
         return query.getResultList();
     }
-}
 
-enum PartnershipKeyOrder {
-    PROJECT_TITLE("project.title"),
-    ENTERPRISE_NAME ("enterprise.name");
-
-    public String keyChain;
-
-    PartnershipKeyOrder(String keyChain) {
-        this.keyChain = keyChain;
+    /**
+     * Search engine or partnerships
+     * @param partnershipExample the Example of partnership used to perform the query
+     * @param pageable the object descriping page and ordering
+     * @return the list of found partnership
+     */
+    public Page<Partnership> search(Example<Partnership> partnershipExample, Pageable pageable) {
+        return partnerRepository.findAll(partnershipExample,pageable);
     }
 }
 
-enum Order {
-    ASC,
-    DESC
-}
+

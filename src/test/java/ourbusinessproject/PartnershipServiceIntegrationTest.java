@@ -123,16 +123,16 @@ public class PartnershipServiceIntegrationTest {
 
     @Test public void testSearchEngine() {
         // When searching without parameters
-        List<Partnership> res = partnershipService.search(null, null, null, null);
+        List<Partnership> res = partnershipService.search((String) null, null);
         // then we get the 3 partnership
         assertEquals(3, res.size());
         // when searching with project title
-        res = partnershipService.search("p1E1", null, null, null);
+        res = partnershipService.search("p1E1", null);
         // then get 1 partnership
         assertEquals(1, res.size());
         assertEquals(initializationService.getProject1E1().getId(), res.get(0).getProject().getId());
         // when searching with enterprise name
-        res = partnershipService.search(null, "MyComp2", null, null);
+        res = partnershipService.search(null, "MyComp2");
         // then get 2 partnership
         assertEquals(2, res.size());
         assertEquals(initializationService.getProject1E1().getId(), res.get(0).getProject().getId());
