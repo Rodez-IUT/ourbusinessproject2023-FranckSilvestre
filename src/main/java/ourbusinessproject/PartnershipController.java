@@ -3,6 +3,8 @@ package ourbusinessproject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * REST Controller relative to Partnership
  */
@@ -43,5 +45,17 @@ public class PartnershipController {
     public void removePartnership(@PathVariable("partnership_id") long partnershipId) {
         Partnership partnership = partnershipService.findPartnershipById(partnershipId);
         partnershipService.remove(partnership);
+    }
+
+    /**
+     * Search partnerships
+     * @param projectTitle the project title of partnerships
+     * @param enterpriseName the enterprise name of partnerships
+     * @return the list of found partnerships
+     */
+    @RequestMapping("/api/v1/partnerships/search")
+    public List<Partnership> search(@RequestParam(value = "project_title", required = false) String projectTitle,
+                                    @RequestParam(value = "enterprise_name", required = false) String enterpriseName) {
+        return partnershipService.search(projectTitle, enterpriseName, null, null);
     }
 }

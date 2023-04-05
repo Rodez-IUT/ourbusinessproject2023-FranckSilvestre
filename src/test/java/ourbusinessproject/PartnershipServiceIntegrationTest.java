@@ -9,6 +9,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.transaction.Transactional;
 
+import java.util.List;
+
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNull.notNullValue;
 import static org.hamcrest.core.IsNull.nullValue;
@@ -117,6 +119,26 @@ public class PartnershipServiceIntegrationTest {
         assertThat(initializationService.getPartnershipP2E1WithE2().getEnterprise().getId(),
                 is(initializationService.getEnterprise2().getId()));
 
+    }
+
+    @Test public void testSearchEngine() {
+        // When searching without parameters
+        List<Partnership> res = partnershipService.search(null, null, null, null);
+        // then we get the 3 partnership
+        assertEquals(3, res.size());
+        // when searching with project title
+        res = partnershipService.search("p1E1", null, null, null);
+        // then get 1 partnership
+        assertEquals(1, res.size());
+        assertEquals(initializationService.getProject1E1().getId(), res.get(0).getProject().getId());
+        // when searching with enterprise name
+        res = partnershipService.search(null, "MyComp2", null, null);
+        // then get 2 partnership
+        assertEquals(2, res.size());
+        assertEquals(initializationService.getProject1E1().getId(), res.get(0).getProject().getId());
+        assertEquals(initializationService.getProject2E1().getId(), res.get(1).getProject().getId());
+        assertEquals(initializationService.getEnterprise2().getId(), res.get(0).getEnterprise().getId());
+        assertEquals(initializationService.getEnterprise2().getId(), res.get(1).getEnterprise().getId());
     }
 
 }
