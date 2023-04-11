@@ -5,6 +5,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.transaction.Transactional;
@@ -139,6 +142,34 @@ public class PartnershipServiceIntegrationTest {
         assertEquals(initializationService.getProject2E1().getId(), res.get(1).getProject().getId());
         assertEquals(initializationService.getEnterprise2().getId(), res.get(0).getEnterprise().getId());
         assertEquals(initializationService.getEnterprise2().getId(), res.get(1).getEnterprise().getId());
+    }
+
+    @Test public void testSearchEngineWithRepository() {
+        // When searching without parameters
+        Page<Partnership> res = partnershipService.search(Example.of(new Partnership()), Pageable.ofSize(3));
+        // then we get the 3 partnership
+        assertEquals(3, res.getTotalElements());
+        // when searching with project title
+        Partnership partnership = new Partnership();
+        Project project = new Project();
+        project.setTitle("p1E1");
+        partnership.setProject(project);
+        res = partnershipService.search(Example.of(partnership), Pageable.ofSize(3));
+        // then get 1 partnership
+        assertEquals(1, res.getTotalElements());
+        assertEquals(initializationService.getProject1E1().getId(), res.stream().toList().get(0).getProject().getId());
+        // when searching with enterprise name
+        Enterprise enterprise = new Enterprise();
+        enterprise.setName("MyComp2");
+        partnership.setProject(null);
+        partnership.setEnterprise(enterprise);
+        res = partnershipService.search(Example.of(partnership), Pageable.ofSize(3));
+        // then get 2 partnership
+        assertEquals(2, res.getTotalElements());
+        assertEquals(initializationService.getProject1E1().getId(), res.stream().toList().get(0).getProject().getId());
+        assertEquals(initializationService.getProject2E1().getId(), res.stream().toList().get(1).getProject().getId());
+        assertEquals(initializationService.getEnterprise2().getId(), res.stream().toList().get(0).getEnterprise().getId());
+        assertEquals(initializationService.getEnterprise2().getId(), res.stream().toList().get(1).getEnterprise().getId());
     }
 
 }
